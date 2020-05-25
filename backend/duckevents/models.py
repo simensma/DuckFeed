@@ -29,6 +29,9 @@ class FoodType(models.Model):
 
 
 class FeedSchedule(models.Model):
+    """
+    Repeats associated feeding every <days> days
+    """
     days = models.PositiveIntegerField()
 
 

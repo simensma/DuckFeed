@@ -4,6 +4,14 @@ import { render, fireEvent, wait } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
 /**
+ * Mock FoodTypeSelector as it's got it's own tests
+ */
+jest.mock("../food-type-selector/FoodTypeSelector", () => ({
+  __esModule: true,
+  default: () => "<div></div>",
+}));
+
+/**
  * Helper method to verify that FeedScheduleForm does not contain the given error message when rendered
  * @param {string} errorMessage message to verify
  */
@@ -47,7 +55,6 @@ async function verifyValueCausesError(
   // make sure errorValidationText is found
   getByText(errorValidationText);
 }
-
 describe("when rendering component", () => {
   describe("date field", () => {
     it("should exist", () => {

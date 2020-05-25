@@ -26,11 +26,20 @@ const initialValues = {
 };
 
 class FeedScheduleForm extends React.Component {
+  constructor() {
+    super();
+    this.submitForm = this.submitForm.bind(this);
+  }
+
+  submitForm(data) {
+    console.log(data);
+  }
+
   render() {
     return (
       <Formik
         validationSchema={feedSchema}
-        onSubmit={console.log}
+        onSubmit={this.submitForm}
         initialValues={initialValues}
       >
         {({
@@ -38,7 +47,7 @@ class FeedScheduleForm extends React.Component {
           handleChange,
           handleBlur,
           values,
-          touched,
+          dirty,
           isValid,
           errors,
         }) => (
@@ -119,6 +128,7 @@ class FeedScheduleForm extends React.Component {
                 <Form.Label>City</Form.Label>
                 <Form.Control
                   name="city"
+                  type="text"
                   value={values.city}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -131,12 +141,16 @@ class FeedScheduleForm extends React.Component {
               <Form.Group as={Col} md="4" controlId="park">
                 <Form.Label>Park</Form.Label>
                 <Form.Control
+                  type="text"
                   name="park"
                   value={values.park}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   isInvalid={errors.park}
                 ></Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.park}
+                </Form.Control.Feedback>
               </Form.Group>
             </Form.Row>
 

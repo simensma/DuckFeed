@@ -1,40 +1,24 @@
-import React, { Suspense } from "react";
-import { Form } from "react-bootstrap";
+import React from "react";
 import axios from "axios";
+import DynamicSelect from "../dynamic-select/DynamicSelect";
+
+const foodTypes = axios
+  .get("http://localhost:8000/duckfeed/food_type/")
+  .then(({ data }) => ({ options: data || []}));
 
 class FoodTypeSelector extends React.Component {
   constructor() {
     super();
-
-    this.state = { foodTypes: [], loading: true };
-  }
-
-  componentDidMount() {
-    axios
-      .get("/food-types")
-      .then(({ data }) =>
-        this.setState({ foodTypes: data.results, loading: false })
-      )
-      .catch(() => this.setState({ loading: false, error: true }));
   }
 
   render() {
     return (
-      <>
-        {this.state.loading ? (
-          "Loading Food Types..."
-        ) : this.state.error ? (
-          "Failed to load food types."
-        ) : (
-          <Form.Control as="select" {...this.props}>
-            <option value="null">Select a food type...</option>
-
-            {(this.state.foodTypes || []).map((type) => (
-              <option key={type.name}>{type.name}</option>
-            ))}
-          </Form.Control>
-        )}
-      </>
+      <DynamicSelect
+        optionsPromise={foodTypes}
+        errorMessage="Failed to load food types"
+        loadingMessage="Loading food types..."
+        defaultOption="Select a food type"
+      />
     );
   }
 }

@@ -28,17 +28,22 @@ class FoodType(models.Model):
         db_table = 'food_type'
 
 
+class FeedSchedule(models.Model):
+    days = models.PositiveIntegerField()
+
+
 class FeedEntry(models.Model):
     """
     Model that represents a feed entry submission.
     """
-    date = models.DateTimeField(null=False, blank=False)
-    quantity = models.PositiveIntegerField(null=False, blank=False)
+    date = models.DateTimeField()
+    quantity = models.PositiveIntegerField()
     description = models.TextField(null=True, blank=True, max_length=500)
-    city = models.CharField(null=False, blank=False, max_length=250)
-    park = models.CharField(null=False, blank=False, max_length=250)
-    country = models.ForeignKey(Country, null=False, blank=False, on_delete=models.CASCADE)
-    food_type = models.ForeignKey(FoodType, null=False, blank=False, on_delete=models.CASCADE)
+    city = models.CharField(max_length=250)
+    park = models.CharField(max_length=250)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    food_type = models.ForeignKey(FoodType, on_delete=models.CASCADE)
+    schedule = models.ForeignKey(FeedSchedule, null=True, blank=True, on_delete=models.SET_NULL)
 
     created = models.DateTimeField(auto_now_add=True)
 

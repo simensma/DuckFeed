@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from duckevents.models import Country, FoodType, FeedEntry
+
+admin.site.register(Country)
+admin.site.register(FoodType)
+admin.site.register(FeedEntry)

@@ -4,7 +4,7 @@ import { Form, Col, Button, Alert } from "react-bootstrap";
 import { Formik } from "formik";
 import FoodTypeSelector from "../food-type-selector/FoodTypeSelector";
 import CountrySelector from "../country-selector/CountrySelector";
-import axios from "axios";
+import Api from "../../utils/Api";
 
 const feedSchema = yup.object().shape({
   date: yup.date().required("Please enter a date"),
@@ -49,7 +49,7 @@ class FeedScheduleForm extends React.Component {
     this.setState({ submitting: true });
 
     try {
-      await axios.post("http://localhost:8000/duckfeed/entry/", data);
+      await Api.post("duckfeed/entry/", data);
       resetForm({});
       setStatus({ success: true });
     } catch (e) {

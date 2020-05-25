@@ -1,9 +1,9 @@
 import React from "react";
-import axios from "axios";
 import DynamicSelect from "../dynamic-select/DynamicSelect";
+import Api from "../../utils/Api";
 
-const foodTypes = axios
-  .get("http://localhost:8000/duckfeed/country/")
+const foodTypes = Api
+  .get("duckfeed/country/")
   .then(({ data }) => ({ options: data || []}));
 
 class CountrySelector extends React.Component {

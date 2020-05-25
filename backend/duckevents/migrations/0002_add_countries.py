@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunSQL(
             """
-            insert into country ('code', 'name') values
+            insert into country (code, name) values
                 ('AF', 'Afghanistan'),
                 ('AL', 'Albania'),
                 ('DZ', 'Algeria'),

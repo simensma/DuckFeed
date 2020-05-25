@@ -17,6 +17,14 @@ const feedSchema = yup.object().shape({
   description: yup.string().max(500),
   city: yup.string().required("Please enter a city"),
   park: yup.string().required("Please enter a park"),
+  enableSchedule: yup.boolean(),
+  schedule: yup.object().shape({
+    days: yup.number().when("enableSchedule", {
+      is: true,
+      then: yup.number().required(),
+      otherwise: yup.number().notRequired(),
+    }),
+  }),
 });
 
 const initialValues = {
@@ -25,6 +33,10 @@ const initialValues = {
   description: "",
   city: "",
   park: "",
+  schedule: {
+    days: 1,
+  },
+  enableSchedule: false,
 };
 
 class FeedScheduleForm extends React.Component {
@@ -33,17 +45,19 @@ class FeedScheduleForm extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  async submitForm(data, {resetForm, setSubmitting, setErrors, setStatus}) {
-    this.setState({submitting: true});
+  async submitForm(data, { resetForm, setSubmitting, setErrors, setStatus }) {
+    this.setState({ submitting: true });
 
     try {
-      await axios.post('http://localhost:8000/duckfeed/entry/', data)
+      await axios.post("http://localhost:8000/duckfeed/entry/", data);
       resetForm({});
-      setStatus({success: true});
-    } catch(e) {
-      setStatus({success: false});
+      setStatus({ success: true });
+    } catch (e) {
+      setStatus({ success: false });
       setSubmitting(false);
-      setErrors({submit: e.message || 'Something went wrong when submitting entry'});
+      setErrors({
+        submit: e.message || "Something went wrong when submitting entry",
+      });
     }
   }
 
@@ -177,17 +191,43 @@ class FeedScheduleForm extends React.Component {
               </Form.Group>
             </Form.Row>
 
+            <Form.Row>
+              <Form.Group as={Col} md="4" controlId="enableSchedule">
+                <Form.Check
+                  name="enableSchedule"
+                  type="checkbox"
+                  label="Repeat event"
+                  onChange={handleChange}
+                />
+
+                {values.enableSchedule && (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <span>Every </span>
+                    <Form.Control
+                      style={{ margin: "0 4px" }}
+                      type="number"
+                      name="schedule.days"
+                      value={values.schedule.days}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isInvalid={errors.days}
+                    ></Form.Control>
+                    <span> days</span>
+                  </div>
+                )}
+              </Form.Group>
+            </Form.Row>
+
             {status && status.success && (
               <Alert variant="success">Entry successfully submitted!</Alert>
             )}
-            {errors.submit && (
-              <Alert variant="danger">{errors.submit}</Alert>
-            )}
-            
+            {errors.submit && <Alert variant="danger">{errors.submit}</Alert>}
+
             <Form.Row>
-              <Button type="submit" disabled={submitting}>Submit entry</Button>
+              <Button type="submit" disabled={submitting}>
+                Submit entry
+              </Button>
             </Form.Row>
-            
           </Form>
         )}
       </Formik>

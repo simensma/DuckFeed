@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from duckevents import views
+from duckevents.tasks import insert_scheduled_events
 
 router = routers.DefaultRouter()
 
@@ -29,3 +30,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('duckfeed/', include(router.urls))
 ]
+
+# Initialize background task to check for new scheduled events every 30s
+insert_scheduled_events(repeat=30, repeat_until=None)

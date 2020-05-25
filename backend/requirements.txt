@@ -5,3 +5,4 @@ pkg-resources==0.0.0
 pytz==2020.1
 sqlparse==0.3.1
 django-cors-header==3.3.0
+django-background-tasks==1.2.5

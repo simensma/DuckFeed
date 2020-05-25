@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'duckevents.apps.DuckeventsConfig',
+    'background_task',
 ]
 
 MIDDLEWARE = [

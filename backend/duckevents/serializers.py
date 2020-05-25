@@ -40,7 +40,10 @@ class FeedEntrySerializer(serializers.ModelSerializer):
         :param validated_data: Validated post body
         :return: Created FeedEntry instance
         """
-        schedule_data = validated_data.pop('schedule')
-        schedule = FeedSchedule.objects.create(**schedule_data) if schedule_data else None
+        if 'schedule' in validated_data:
+            schedule_data = validated_data.pop('schedule')
+            schedule = FeedSchedule.objects.create(**schedule_data) if schedule_data else None
+        else:
+            schedule = None
 
         return FeedEntry.objects.create(schedule=schedule, **validated_data)

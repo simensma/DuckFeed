@@ -49,7 +49,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'duckfeed.urls'
 
@@ -71,6 +73,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'duckfeed.wsgi.application'
 
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

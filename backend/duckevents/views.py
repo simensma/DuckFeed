@@ -1,8 +1,8 @@
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny
 
-from duckevents.models import FeedEntry
-from duckevents.serializers import FeedEntrySerializer
+from duckevents.models import FeedEntry, FoodType, Country
+from duckevents.serializers import FeedEntrySerializer, FoodTypeSerializer, CountrySerializer
 
 
 class DuckFeedEntryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -15,4 +15,24 @@ class DuckFeedEntryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     queryset = FeedEntry.objects.all()
     serializer_class = FeedEntrySerializer
+    permission_classes = (AllowAny, )
+
+
+class FoodTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    API endpoint for retrieving food types
+    This endpoint is open to everyone.
+    """
+    queryset = FoodType.objects.all()
+    serializer_class = FoodTypeSerializer
+    permission_classes = (AllowAny, )
+
+
+class CountryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    API endpoint for retrieving countries
+    This endpoint is open to everyone.
+    """
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
     permission_classes = (AllowAny, )

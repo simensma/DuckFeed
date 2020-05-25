@@ -31,5 +31,5 @@ urlpatterns = [
     path('duckfeed/', include(router.urls))
 ]
 
-# Initialize background task to check for new scheduled events every 30s
-# insert_scheduled_events(repeat=30, repeat_until=None)
+# Initialize background task to check for new scheduled events every 5min
+insert_scheduled_events(repeat=5*60, repeat_until=None)

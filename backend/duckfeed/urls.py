@@ -32,4 +32,4 @@ urlpatterns = [
 ]
 
 # Initialize background task to check for new scheduled events every 30s
-insert_scheduled_events(repeat=30, repeat_until=None)
+# insert_scheduled_events(repeat=30, repeat_until=None)

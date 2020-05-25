@@ -1,11 +1,52 @@
-import axios from "axios";
-
 import React from "react";
 import FeedScheduleForm from "./FeedScheduleForm";
 import { render, fireEvent, wait } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
-import MockAdapter from "axios-mock-adapter";
+/**
+ * Helper method to verify that FeedScheduleForm does not contain the given error message when rendered
+ * @param {string} errorMessage message to verify
+ */
+async function verifyNoErrorMessage(errorMessage) {
+  // Render form + wait for Formik to be properly initialized
+  const { queryByText } = render(<FeedScheduleForm />);
+  await wait();
+
+  // Verify that errorMessage is not found
+  const input = queryByText(errorMessage);
+  expect(input).toBeNull();
+}
+
+/**
+ *
+ * @param {string} labelText label of the input group you want to validate
+ * @param {*} targetValue value that should cause error if set as value of input
+ * @param {*} errorValidationText error validation text for the field to test
+ */
+async function verifyValueCausesError(
+  labelText,
+  targetValue,
+  errorValidationText
+) {
+  const { getByText, getByLabelText } = render(<FeedScheduleForm />);
+
+  // Find input to validate
+  const input = getByLabelText(labelText);
+
+  // Udpate input to validate with new value
+  act(() => {
+    fireEvent.change(input, {
+      target: {
+        value: targetValue,
+      },
+    });
+  });
+
+  await wait();
+
+  // make sure errorValidationText is found
+  getByText(errorValidationText);
+}
 
 describe("when rendering component", () => {
   describe("date field", () => {
@@ -15,29 +56,11 @@ describe("when rendering component", () => {
     });
 
     it("should not show an error message on load", async () => {
-      const { queryByText } = render(<FeedScheduleForm />);
-
-      await wait();
-      const input = queryByText("Please enter a date");
-
-      expect(input).toBeNull();
+      await verifyNoErrorMessage("Please enter a date");
     });
 
     it("should show error message when empty", async () => {
-      const { getByText, getByLabelText } = render(<FeedScheduleForm />);
-      const input = getByLabelText("Date");
-
-      act(() => {
-        fireEvent.change(input, {
-          target: {
-            value: "",
-          },
-        });
-      });
-
-      await wait();
-
-      getByText("Please enter a date");
+      await verifyValueCausesError("date", "", "Please enter a date");
     });
   });
 
@@ -48,29 +71,15 @@ describe("when rendering component", () => {
     });
 
     it("should not show an error message on load", async () => {
-      const { queryByText } = render(<FeedScheduleForm />);
-
-      await wait();
-      const input = queryByText("Please enter number of ducks observed");
-
-      expect(input).toBeNull();
+      await verifyNoErrorMessage("Please enter number of ducks observed");
     });
 
     it("should show error message when empty", async () => {
-      const { getByText, getByLabelText } = render(<FeedScheduleForm />);
-      const input = getByLabelText("Quantity");
-
-      act(() => {
-        fireEvent.change(input, {
-          target: {
-            value: "",
-          },
-        });
-      });
-
-      await wait();
-
-      getByText("Please enter number of ducks observed");
+      await verifyValueCausesError(
+        "Quantity",
+        "",
+        "Please enter number of ducks observed"
+      );
     });
   });
 
@@ -81,20 +90,12 @@ describe("when rendering component", () => {
     });
 
     it("should show error message when more than 500 chars", async () => {
-      const { getByText, getByLabelText } = render(<FeedScheduleForm />);
-      const input = getByLabelText("Description");
-
-      act(() => {
-        fireEvent.change(input, {
-          target: {
-            value: "t".repeat(501),
-          },
-        });
-      });
-
-      await wait();
-
-      getByText("description must be at most 500 characters");
+      await verifyValueCausesError(
+        "Description",
+        "t".repeat(501),
+        "description must be at most 500 characters"
+      );
     });
   });
+  
 });

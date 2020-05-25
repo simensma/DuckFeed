@@ -67,6 +67,9 @@ ROOT_URLCONF = 'duckfeed.urls'
 ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 CORS_ORIGIN_WHITELIST = [os.getenv("CORS_ORIGIN_WHITELIST")]
 
+# This should be removed once the above has been debugged and fixed
+CORS_ORIGIN_ALLOW_ALL = True
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

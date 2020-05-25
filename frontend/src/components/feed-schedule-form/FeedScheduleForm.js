@@ -1,11 +1,13 @@
 import React from "react";
 import * as yup from "yup";
-import { Form, Col, Button } from "react-bootstrap";
-import { Formik } from "formik";
+import { Form, Col, Button, Alert } from "react-bootstrap";
+import { Formik, setNestedObjectValues } from "formik";
 import FoodTypeSelector from "../food-type-selector/FoodTypeSelector";
+import CountrySelector from "../country-selector/CountrySelector";
+import axios from "axios";
 
 const feedSchema = yup.object().shape({
-  eventDate: yup.date().required("Please enter a date"),
+  date: yup.date().required("Please enter a date"),
   foodType: yup.string().required("Please select a food type"),
   quantity: yup
     .number()
@@ -18,7 +20,7 @@ const feedSchema = yup.object().shape({
 });
 
 const initialValues = {
-  eventDate: new Date(),
+  date: new Date(),
   quantity: 1,
   description: "",
   city: "",
@@ -31,8 +33,18 @@ class FeedScheduleForm extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  submitForm(data) {
-    console.log(data);
+  async submitForm(data, {resetForm, setSubmitting, setErrors, setStatus}) {
+    this.setState({submitting: true});
+
+    try {
+      await axios.post('http://localhost:8000/duckfeed/entry/', data)
+      resetForm({});
+      setStatus({success: true});
+    } catch(e) {
+      setStatus({success: false});
+      setSubmitting(false);
+      setErrors({submit: e.message || 'Something went wrong when submitting entry'});
+    }
   }
 
   render() {
@@ -47,24 +59,25 @@ class FeedScheduleForm extends React.Component {
           handleChange,
           handleBlur,
           values,
-          dirty,
-          isValid,
+          status,
+          submitting,
           errors,
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
+            {}
             <Form.Row>
-              <Form.Group as={Col} md="12" controlId="eventDate">
+              <Form.Group as={Col} md="12" controlId="date">
                 <Form.Label>Date</Form.Label>
                 <Form.Control
                   type="datetime"
-                  name="eventDate"
-                  value={values.eventDate}
+                  name="date"
+                  value={values.date}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  isInvalid={errors.eventDate}
+                  isInvalid={errors.date}
                 ></Form.Control>
                 <Form.Control.Feedback type="invalid">
-                  {errors.eventDate}
+                  {errors.date}
                 </Form.Control.Feedback>
               </Form.Group>
             </Form.Row>
@@ -121,8 +134,18 @@ class FeedScheduleForm extends React.Component {
             </Form.Row>
 
             <Form.Row>
-              <Form.Group as={Col} md="4" controlId="countryInput">
+              <Form.Group as={Col} md="4" controlId="country">
                 <Form.Label>Country</Form.Label>
+                <CountrySelector
+                  name="country"
+                  value={values.country}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={errors.country}
+                ></CountrySelector>
+                <Form.Control.Feedback type="invalid">
+                  {errors.country}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} md="4" controlId="city">
                 <Form.Label>City</Form.Label>
@@ -154,7 +177,14 @@ class FeedScheduleForm extends React.Component {
               </Form.Group>
             </Form.Row>
 
-            <Button type="submit">Submit entry</Button>
+            {status && status.success && (
+              <Alert variant="success">Entry successfully submitted!</Alert>
+            )}
+            {errors.submit && (
+              <Alert variant="danger">{errors.submit}</Alert>
+            )}
+
+            <Button type="submit" disabled={submitting}>Submit entry</Button>
           </Form>
         )}
       </Formik>

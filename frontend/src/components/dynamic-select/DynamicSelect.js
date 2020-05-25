@@ -20,6 +20,8 @@ class DynamicSelect extends React.Component {
       defaultOption,
       loadingMessage,
       errorMessage,
+      idProp,
+      valueProp,
       ...props
     } = this.props;
 
@@ -34,7 +36,7 @@ class DynamicSelect extends React.Component {
             <option value="null">{defaultOption}</option>
 
             {(this.state.options || []).map((type) => (
-              <option key={type.name}>{type.name}</option>
+              <option key={type[idProp] || type.name} value={type[valueProp] || type.name}>{type.name}</option>
             ))}
           </Form.Control>
         )}

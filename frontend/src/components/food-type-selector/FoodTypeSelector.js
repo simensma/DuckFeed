@@ -14,10 +14,13 @@ class FoodTypeSelector extends React.Component {
   render() {
     return (
       <DynamicSelect
+        {...this.props}
         optionsPromise={foodTypes}
         errorMessage="Failed to load food types"
         loadingMessage="Loading food types..."
         defaultOption="Select a food type"
+        idProp="id"
+        valueProp="id"
       />
     );
   }

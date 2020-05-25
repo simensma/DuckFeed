@@ -1,7 +1,7 @@
 import React from "react";
 import * as yup from "yup";
 import { Form, Col, Button, Alert } from "react-bootstrap";
-import { Formik, setNestedObjectValues } from "formik";
+import { Formik } from "formik";
 import FoodTypeSelector from "../food-type-selector/FoodTypeSelector";
 import CountrySelector from "../country-selector/CountrySelector";
 import axios from "axios";
@@ -183,8 +183,11 @@ class FeedScheduleForm extends React.Component {
             {errors.submit && (
               <Alert variant="danger">{errors.submit}</Alert>
             )}
-
-            <Button type="submit" disabled={submitting}>Submit entry</Button>
+            
+            <Form.Row>
+              <Button type="submit" disabled={submitting}>Submit entry</Button>
+            </Form.Row>
+            
           </Form>
         )}
       </Formik>

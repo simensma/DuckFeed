@@ -28,9 +28,9 @@ class DynamicSelect extends React.Component {
     return (
       <>
         {this.state.loading ? (
-          loadingMessage || "Loading..."
+          <p>{loadingMessage || "Loading..."}</p>
         ) : this.state.error ? (
-          errorMessage || "Failed to load."
+          <p>{errorMessage || "Failed to load."}</p>
         ) : (
           <Form.Control as="select" {...props}>
             <option value="null">{defaultOption}</option>

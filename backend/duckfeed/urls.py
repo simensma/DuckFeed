@@ -21,7 +21,7 @@ from duckevents import views
 
 router = routers.DefaultRouter()
 
-router.register(r'entry', views.DuckFeedEntryViewSet)
+router.register(r'entry', views.DuckFeedEntryViewSet, basename='entry')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

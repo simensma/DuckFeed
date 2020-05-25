@@ -1,7 +1,5 @@
-
-# Create your views here.
 from rest_framework import mixins, viewsets
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny
 
 from duckevents.models import FeedEntry
 from duckevents.serializers import FeedEntrySerializer

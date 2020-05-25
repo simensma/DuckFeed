@@ -16,8 +16,8 @@ class FoodTypeSerializer(serializers.ModelSerializer):
 
 
 class FeedEntrySerializer(serializers.ModelSerializer):
-    foodType = serializers.PrimaryKeyRelatedField(queryset=FoodType.objects.all())
-    country = serializers.SlugRelatedField(slug_field=Country.code, queryset=Country.objects.all())
+    foodType = serializers.PrimaryKeyRelatedField(queryset=FoodType.objects.all(), source='food_type')
+    country = serializers.SlugRelatedField(slug_field='code', queryset=Country.objects.all())
 
     class Meta:
         model = FeedEntry

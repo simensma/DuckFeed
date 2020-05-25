@@ -13,11 +13,16 @@ const feedSchema = yup.object().shape({
     .min(0)
     .max(1000),
   description: yup.string().max(500),
+  city: yup.string().required("Please enter a city"),
+  park: yup.string().required("Please enter a park"),
 });
 
 const initialValues = {
   eventDate: new Date(),
   quantity: 1,
+  description: "",
+  city: "",
+  park: "",
 };
 
 class FeedScheduleForm extends React.Component {
@@ -104,6 +109,35 @@ class FeedScheduleForm extends React.Component {
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
+            </Form.Row>
+
+            <Form.Row>
+              <Form.Group as={Col} md="4" controlId="countryInput">
+                <Form.Label>Country</Form.Label>
+              </Form.Group>
+              <Form.Group as={Col} md="4" controlId="city">
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                  name="city"
+                  value={values.city}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={errors.city}
+                ></Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.city}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} md="4" controlId="park">
+                <Form.Label>Park</Form.Label>
+                <Form.Control
+                  name="park"
+                  value={values.park}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={errors.park}
+                ></Form.Control>
+              </Form.Group>
             </Form.Row>
 
             <Button type="submit">Submit entry</Button>

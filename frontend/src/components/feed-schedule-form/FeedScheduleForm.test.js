@@ -60,7 +60,7 @@ describe("when rendering component", () => {
     });
 
     it("should show error message when empty", async () => {
-      await verifyValueCausesError("date", "", "Please enter a date");
+      await verifyValueCausesError("Date", "", "Please enter a date");
     });
   });
 
@@ -97,5 +97,34 @@ describe("when rendering component", () => {
       );
     });
   });
-  
+
+  describe("City input field", () => {
+    it("should exist", () => {
+      const { getByLabelText } = render(<FeedScheduleForm />);
+      getByLabelText("City");
+    });
+
+    it("should not show an error message on load", async () => {
+      await verifyNoErrorMessage("Please enter a city");
+    });
+
+    it("should show error message when empty", async () => {
+      await verifyValueCausesError("City", "", "Please enter a city");
+    });
+  });
+
+  describe("Park field", () => {
+    it("should exist", () => {
+      const { getByLabelText } = render(<FeedScheduleForm />);
+      getByLabelText("Park");
+    });
+
+    it("should not show an error message on load", async () => {
+      await verifyNoErrorMessage("Please enter a park");
+    });
+
+    it("should show error message when empty", async () => {
+      await verifyValueCausesError("Park", "", "Please enter a park");
+    });
+  });
 });

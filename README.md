@@ -3,6 +3,9 @@ DuckFeed is a system allowing for submissions of records of duck feeding events.
 
 The project is structured as two separate apps, a frontend written in React (`frontend/` folder), and backend written in Python (Django) (`backend/` folder), and is hosted on Heroku.
 
+The app itself can be accessed at https://simensma-duck-feed-frontend.herokuapp.com.
+The django admin interface used for reporting purposes can be found at https://simensma-duck-feed.herokuapp.com/admin
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
@@ -45,15 +48,27 @@ To run the project locally run
 
 `npm start`
 
+To run all tests run
+
+`npm test`
+
 To deploy the frontend to heroku, run
 
-`git subtree push --prefix backend <branch> master` where branch is the branch tracking your heroku frontend project.
+`git subtree push --prefix frontend <branch> master` where branch is the branch tracking your heroku frontend project.
+
 
 ### Backend
 To run the project locally, run
 
-`./manage.py runserver localhost:<port>`
+`python ./manage.py runserver localhost:<port>`
 
+To run all tests run
+
+`python ./manage.py test`
+
+To deploy the backend to heroku, run
+
+`git subtree push --prefix backend <branch> master` where branch is the branch tracking your heroku backend project.
 
 ## Contact
 

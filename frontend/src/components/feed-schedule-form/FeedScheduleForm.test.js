@@ -1,12 +1,24 @@
 import React from "react";
 import FeedScheduleForm from "./FeedScheduleForm";
-import { render, fireEvent, wait } from "@testing-library/react";
+import {
+  render,
+  fireEvent,
+  wait,
+  waitForElement,
+  cleanup,
+  getByText,
+} from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
 /**
- * Mock FoodTypeSelector as it's got it's own tests
+ * Mock FoodTypeSelector and CountrySelector as they have got their own tests.
  */
 jest.mock("../food-type-selector/FoodTypeSelector", () => ({
+  __esModule: true,
+  default: () => "<div></div>",
+}));
+
+jest.mock("../country-selector/CountrySelector", () => ({
   __esModule: true,
   default: () => "<div></div>",
 }));
@@ -34,28 +46,35 @@ async function verifyNoErrorMessage(errorMessage) {
 async function verifyValueCausesError(
   labelText,
   targetValue,
-  errorValidationText
+  errorValidationText,
+  fromValue
 ) {
   const { getByText, getByLabelText } = render(<FeedScheduleForm />);
 
   // Find input to validate
   const input = getByLabelText(labelText);
 
-  // Udpate input to validate with new value
-  act(() => {
+  if (fromValue !== undefined) {
     fireEvent.change(input, {
       target: {
-        value: targetValue,
+        value: fromValue,
       },
     });
+  }
+
+  // Udpate input to validate with new value
+  fireEvent.change(input, {
+    target: {
+      value: targetValue,
+    },
   });
 
   await wait();
-
-  // make sure errorValidationText is found
   getByText(errorValidationText);
 }
 describe("when rendering component", () => {
+  afterEach(cleanup);
+
   describe("date field", () => {
     it("should exist", () => {
       const { getByLabelText } = render(<FeedScheduleForm />);
@@ -116,7 +135,12 @@ describe("when rendering component", () => {
     });
 
     it("should show error message when empty", async () => {
-      await verifyValueCausesError("City", "", "Please enter a city");
+      await verifyValueCausesError(
+        "City",
+        "",
+        "Please enter a city",
+        "This is an initial value"
+      );
     });
   });
 
@@ -131,7 +155,12 @@ describe("when rendering component", () => {
     });
 
     it("should show error message when empty", async () => {
-      await verifyValueCausesError("Park", "", "Please enter a park");
+      await verifyValueCausesError(
+        "Park",
+        "",
+        "Please enter a park",
+        "This is an initial value"
+      );
     });
   });
 });

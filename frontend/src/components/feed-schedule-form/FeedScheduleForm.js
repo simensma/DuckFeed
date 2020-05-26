@@ -1,44 +1,14 @@
 import React from "react";
-import * as yup from "yup";
 import { Form, Col, Button, Alert } from "react-bootstrap";
 import { Formik } from "formik";
 import FoodTypeSelector from "../food-type-selector/FoodTypeSelector";
 import CountrySelector from "../country-selector/CountrySelector";
 import Api from "../../utils/Api";
+import { feedSchema, feedInitialValues } from "./feedSchema";
 
-const feedSchema = yup.object().shape({
-  date: yup.date().required("Please enter a date"),
-  foodType: yup.string().required("Please select a food type"),
-  quantity: yup
-    .number()
-    .required("Please enter number of ducks observed")
-    .min(0)
-    .max(1000),
-  description: yup.string().max(500),
-  city: yup.string().required("Please enter a city"),
-  park: yup.string().required("Please enter a park"),
-  enableSchedule: yup.boolean(),
-  schedule: yup.object().shape({
-    days: yup.number().when("enableSchedule", {
-      is: true,
-      then: yup.number().required(),
-      otherwise: yup.number().notRequired(),
-    }),
-  }),
-});
-
-const initialValues = {
-  date: new Date(),
-  quantity: 1,
-  description: "",
-  city: "",
-  park: "",
-  schedule: {
-    days: 1,
-  },
-  enableSchedule: false,
-};
-
+/**
+ * Component for submission of feed entries.
+ */
 class FeedScheduleForm extends React.Component {
   constructor() {
     super();
@@ -66,7 +36,7 @@ class FeedScheduleForm extends React.Component {
       <Formik
         validationSchema={feedSchema}
         onSubmit={this.submitForm}
-        initialValues={initialValues}
+        initialValues={feedInitialValues}
       >
         {({
           handleSubmit,
@@ -78,12 +48,12 @@ class FeedScheduleForm extends React.Component {
           errors,
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
-            {}
             <Form.Row>
               <Form.Group as={Col} md="12" controlId="date">
                 <Form.Label>Date</Form.Label>
                 <Form.Control
                   type="datetime"
+                  placeholder="Date"
                   name="date"
                   value={values.date}
                   onChange={handleChange}
@@ -117,6 +87,7 @@ class FeedScheduleForm extends React.Component {
                     <Form.Control
                       type="number"
                       name="quantity"
+                      placeholder="Quantity"
                       value={values.quantity}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -135,6 +106,7 @@ class FeedScheduleForm extends React.Component {
                     as="textarea"
                     name="description"
                     rows="5"
+                    placeholder="Enter a description of your feeding"
                     value={values.description}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -166,6 +138,7 @@ class FeedScheduleForm extends React.Component {
                 <Form.Control
                   name="city"
                   type="text"
+                  placeholder="Enter a city"
                   value={values.city}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -175,15 +148,16 @@ class FeedScheduleForm extends React.Component {
                   {errors.city}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} md="4" controlId="park">
+              <Form.Group as={Col} md="4" controlId="parkInput">
                 <Form.Label>Park</Form.Label>
                 <Form.Control
                   type="text"
                   name="park"
+                  placeholder="Park"
                   value={values.park}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  isInvalid={errors.park}
+                  isInvalid={!!errors.park}
                 ></Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.park}

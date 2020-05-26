@@ -2,9 +2,9 @@ import React from "react";
 import DynamicSelect from "../dynamic-select/DynamicSelect";
 import Api from "../../utils/Api";
 
-const foodTypes = Api
-  .get("duckfeed/food_type/")
-  .then(({ data }) => ({ options: data || []}));
+const foodTypes = Api.get("duckfeed/food_type/").then(({ data }) => ({
+  options: data || [],
+}));
 
 class FoodTypeSelector extends React.Component {
   constructor() {

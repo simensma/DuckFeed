@@ -27,7 +27,7 @@ describe("DynamicSelect", () => {
       const { getByText } = render(
         <DynamicSelect
           optionsPromise={failedRequest}
-            errorMessage="Failed to load"
+          errorMessage="Failed to load"
         />
       );
       await wait();
